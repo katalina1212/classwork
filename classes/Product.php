@@ -1,11 +1,11 @@
 <?php
 namespace aitsydney;
 class Product extends Database{
-    public function_construct(){
-      parent::_construct();
+    public function __construct(){
+      parent::__construct();
 
     }
-    public function getProduct(){
+    public function getProducts(){
         $query = "SELECT 
         product.product_id,
         product.name,
