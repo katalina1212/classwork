@@ -1,12 +1,6 @@
 <!doctype html>
 <html>
-    <head>
-    <title>{{title}}</title>
-    <link rel="stylesheet" href="node_modules\bootstrap\dist\css\bootstrap.min.css">
-    <script src="node_modules\jquery\dist\jquery.min.js"></script>
-    <script src="node_modules\popper.js\dist\popper.min.js"></script>
-    <script src="node_modules\bootstrap\dist\js\bootstrap.min.js"></script>
-    </head>
+    {% include 'partials/head.twig' %}
 
     <body>
     <main class="container-fluid">
@@ -17,6 +11,7 @@
                     <h4 class="product-name">{{product.name}}</h4>
                     <h6 class="product-price">{{product.price}}</h6>
                     <p class="product-description">{{product.image | slice(0,50) ~ '...' }}</p>
+                    <a href="detail.php?product_id={{product.product_id}}">Detail</a>
                 </div>
             {% endfor %}
         </div>
