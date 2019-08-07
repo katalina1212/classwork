@@ -6,15 +6,14 @@ class Product extends Database{
 
     }
     public function getProducts(){
-        $query = "SELECT 
-        product.product_id,
+        $query = "SELECT
+        @product_id := product.product_id as product_id,
         product.name,
         product.description,
         product.price,
-        image.image_file_name AS image
-        FROM product
-        INNER JOIN product_image ON product.product_id = product_image.product_id 
-        INNER JOIN image ON product_image.image_id = image.image_id";
+        @image_id := ( SELECT image_id FROM product_image WHERE product_id = @product_id LIMIT 1) as image_id,
+        ( SELECT image_file_name FROM image WHERE image_id = @image_id ) as image
+        FROM product";
 
         $statement = $this -> connection -> prepare( $query );
         if( $statement -> execute() ){
