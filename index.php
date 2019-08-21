@@ -18,6 +18,12 @@ use aitsydney\Product;
 $products = new Product();
 $products_result = $products ->getProducts();
 
+use aitsydney\Category;
+
+$cat = new Category();
+$categories = $cat -> getCategories();
+print_r($categories);
+
 //create twig loader 
 //$loader = new \Twig\Loader\FilesystemLoader('templates');
 $loader = new Twig_Loader_Filesystem('templates');
@@ -30,6 +36,7 @@ $template = $twig -> load('home.twig');
 
 //pass values to twig
 echo $template -> render([
+    'categories' => $categories,
     'navigation' => $nav_items,
     'products' => $products_result,
     'title' => 'Hello shop'

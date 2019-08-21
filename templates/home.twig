@@ -6,7 +6,13 @@
     {% include 'partials/navigation.twig'%}
     <main class="container-fluid">
         <div class="row">
-            {% for product in products %}
+             <div class="col-md-2">
+             {% include 'partials/category.twig' %}
+             
+             </div>
+             <div class="col-md-10">
+                 <div class="row">
+                    {% for product in products %}
                 <div class="col-md-3">
                     <img class="img-fluid" src="images/products/products/{{product.image}}">
                     <h4 class="product-name">{{product.name}}</h4>
@@ -15,7 +21,11 @@
                     <a href="detail.php?product_id={{product.product_id}}">Detail</a>
                 </div>
             {% endfor %}
+
+                 </div>
+             </div>
+            
         </div>
-    </main>
+      </main>
     </body>
 </html>
