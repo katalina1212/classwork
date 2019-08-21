@@ -25,7 +25,7 @@ class Account extends Database{
            $register_errors['email'] = "email address not valid";
        }
        //if there are no errors with email and password
-       if( count() $register_errors ) == 0 ){
+       if( count( $register_errors ) == 0 ){
          //hash the password
         $hash = password_hash( $password, PASSWORD_DEFAULT );
         $account_id = $this -> createAccount();
