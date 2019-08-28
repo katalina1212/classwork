@@ -8,20 +8,25 @@ require('vendor/autoload.php');
 
 
 use aitsydney\Navigation;
+use aitsydney\Account;
 
 $nav = new Navigation();
 $nav_items = $nav -> getNavigation();
 
 
-use aitsydney\Product;
+// if request_method == post, user is submitting the register from
+if( $_SERVER['REQUEST_METHOD'] == 'POST' ){
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
-$products = new Product();
-$products_result = $products ->getProducts();
+    //create instance of account class
+    $account = new Account();
+    $register = $account -> register($email,$password);
 
-use aitsydney\Category;
-
-$cat = new Category();
-$categories = $cat -> getCategories();
+}
+else{
+   $register = '';
+}
 
 //create twig loader 
 //$loader = new \Twig\Loader\FilesystemLoader('templates');
@@ -31,14 +36,13 @@ $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 
 //load a twig template
-$template = $twig -> load('home.twig');
+$template = $twig -> load('register.twig');
 
 //pass values to twig
 echo $template -> render([
-    'categories' => $categories,
     'navigation' => $nav_items,
-    'products' => $products_result,
-    'title' => 'Hello shop'
+    'title' => 'Register for an account',
+    'response' => $register
 
     ]);
 ?>

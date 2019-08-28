@@ -11,11 +11,12 @@ class Account extends Database{
 
     public function register( $email, $password ){
       $query = "
-         INSERT INTO account (account_id, email, password, created)
-         VALUES (?,?,?,NOW() )
+         INSERT INTO account ( account_id, email, password, created, accessed, updated)
+         VALUES ( UNHEX(?), ?, ?, NOW(), NOW(), NOW() )
       ";
 
       $register_errors = array();
+      $response = array();
 
        if( strlen($password) < 8 ){
          $register_errors['password'] = "minimum 8 characters";
@@ -29,25 +30,37 @@ class Account extends Database{
          //hash the password
         $hash = password_hash( $password, PASSWORD_DEFAULT );
         $account_id = $this -> createAccount();
-        try{
-        if( $statement = $this -> connection -> prepare( $query ) == false){
-          throw( new Exception('query error') );
-         }
+        try
+        {
+          if(!$statement = $this->connection->prepare($query)){
+            throw( new \Exception("query error"));
+          }
 
-         $statement -> bind_param('sss', $account_id, $email, $hash );
+          $statement -> bind_param('sss', $account_id, $email, $hash );
+
 
           if( $statement -> execute() == false){
-              throw( new Exception('failed to execute') );
+               throw( new \Exception('failed to execute') );
           }
           else{
-              //account is created in database
+            //account is created in database
+              
+            $response['success'] = true;
           }
         }
+        catch( Exception $exc ){
+          error_log( $exc -> getMessage() );
+        }
       }
+      else{
+        $response['errors'] = $register_errors;
+        $response['success'] = false;
+      }
+      return $response;
     }
-    private function createAccountID(){
+    private function createAccount(){
         //get ransom bytes
-        $bytes = openssl_ransom_pseudo_bytes(16);
+        $bytes = openssl_random_pseudo_bytes(16);
         //convert to hexadecimel
         $str = bin2hex( $bytes );
         return $str;
